@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+
+<html>
+<title>DSM LOCAL</title>
+<link rel="icon" type="image/x-icon" href="./logo.png">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./chart.js"></script>
+  <script src="./jalali-moment.browser.js"></script>
+</head>
+
+<body onload="startSendingRequests()" style="background-color: #e4e4e4;">
+
+  <div class="main-navbar">
+    <div id="clock-value"
+      style="flex-grow: 1; display: flex; justify-content: center; align-items: center; font-size: 16px; color: #ffffff;">
+      ..../../.. ..:..:..
+    </div>
+    <div class="navbar" style="flex-grow: 6;">
+      <div id="tab-home" class="tab-item" onclick="showContent('home')">
+        خانه
+      </div>
+      <div id="tab-settings" class="tab-item" onclick="showContent('settings')">
+        تنظیمات اینترنت
+      </div>
+      <div id="tab-sensors" class="tab-item" onclick="showContent('sensors')">
+        سنسورها
+      </div>
+      <div id="tab-graph" class="tab-item" onclick="showContent('graph')">
+        گراف
+      </div>
+    </div>
+    <div>
+      <div class="info-nav" style="flex-grow: 1;">
+        <div style=" display: flex; justify-content: center;">
+          <p style="font-size: 16px; color: #ffffff;"> دارستان صنعت مانیتورینگ </p>
+          <img class="logo" alt="شرکت دارستان صنعت نیکان" src="./logo.png">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div id="home" class="content">
+    <div class="content-query">
+      <div class="sensors-div">
+        <div class="sensor-online">
+          <div class="online-name-info">
+            <div>
+              sensor 1
+            </div>
+            <div id="online-name-val1">
+              ...
+            </div>
+          </div>
+          <div id="online-temp-val1" style="flex-grow: 6; color: rgb(0, 0, 0);">
+            ...
+          </div>
+        </div>
+
+        <div class="sensor-online">
+          <div class="online-name-info">
+            <div>
+              sensor 2
+            </div>
+            <div id="online-name-val2">
+              ...
+            </div>
+          </div>
+          <div id="online-temp-val2" style="flex-grow: 6; color: rgb(0, 0, 0);">
+            ...
+          </div>
+        </div>
+
+        <div class="sensor-online">
+          <div class="online-name-info">
+            <div>
+              sensor 3
+            </div>
+            <div id="online-name-val3">
+              ...
+            </div>
+          </div>
+          <div id="online-temp-val3" style="flex-grow: 6; color: rgb(0, 0, 0);">
+            ...
+          </div>
+        </div>
+
+        <div class="sensor-online">
+          <div class="online-name-info">
+            <div>
+              sensor 4
+            </div>
+            <div id="online-name-val4">
+              ...
+            </div>
+          </div>
+          <div id="online-temp-val4" style="flex-grow: 6; color: rgb(0, 0, 0);">
+            ...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="settings" class="content">
+    <div class="content-settings">
+      <div class="settings-query">
+        <div>
+          <label class="lable" for="input_SSID">SSID: </label>
+          <input class="input" id="input_SSID" type="text">
+        </div>
+        <div>
+          <label class="lable" for="input_PASSWORD">Password: </label>
+          <input class="input" id="input_PASSWORD" type="password">
+        </div>
+      </div>
+      <div>
+        <button id="btn_SaveSettings" class="btn-submit" onclick="saveSettings()">ثبت</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SENSORS -->
+  <div id="sensors" class="content" style="direction: rtl;">
+    <div class="content-query">
+      <div class="navbar-sensors">
+        <div>
+          <label class="lable">سنسور: </label>
+          <select id="select-sensor-sensors" class="select-query" onchange="onChange_sensorSelect()">
+          </select>
+        </div>
+      </div>
+      <div>
+        <div style="display: flex; justify-content: space-around; margin-top: 50px;">
+          <div>
+            <label class="lable" for="sensor-serial">شناسه: </label>
+            <input class="input" id="sensor-serial" type="text" readonly>
+          </div>
+          <div>
+            <label class="lable" for="sensor-name">اسم: </label>
+            <input class="input" id="sensor-name" type="text">
+          </div>
+          <div>
+            <label class="lable" for="sensor-sendPeriod">بازه ارسال داده: </label>
+            <select id="sensor-sendPeriod" class="select-query">
+              <option value="1">۱ ثانیه</option>
+              <option value="2">۲ ثانیه</option>
+              <option value="5">۵ ثانیه</option>
+              <option value="10">۱۰ ثانیه</option>
+              <option value="15">۱۵ ثانیه</option>
+              <option value="30">۳۰ ثانیه</option>
+              <option value="60">۱ دقیقه</option>
+              <option value="120">۲ دقیقه</option>
+              <option value="300">۵ دقیقه</option>
+              <option value="600">۱۰ دقیقه</option>
+              <option value="900">۱۵ دقیقه</option>
+              <option value="1800">۳۰ دقیقه</option>
+              <option value="3600">۱ ساعت</option>
+              <option value="10800">۳ ساعت</option>
+              <option value="21600">۶ ساعت</option>
+              <option value="43200">۱۲ ساعت</option>
+            </select>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 100px;">
+          <div>
+            <div>
+              <label class="lable" for="sensor-max">max: </label>
+              <input class="input" id="sensor-max" type="number">
+            </div>
+            <div style="margin-top: 10px;">
+              <label class="lable" for="sensor-min">min: </label>
+              <input class="input" id="sensor-min" type="number">
+            </div>
+          </div>
+          <div>
+            <div>
+              <label class="lable" for="sensor-maxPhone">max phone: </label>
+              <input class="input" id="sensor-maxPhone" type="number">
+            </div>
+            <div style="margin-top: 10px;">
+              <label class="lable" for="sensor-minPhone">min phone: </label>
+              <input class="input" id="sensor-minPhone" type="number">
+            </div>
+          </div>
+          <div>
+            <label class="lable" for="sensor-calibration">کالیبراسیون: </label>
+            <input class="input" id="sensor-calibration" type="number">
+          </div>
+        </div>
+        <!--<div style="display: flex; justify-content: space-around; margin-top: 100px;">
+                    <div>
+                        <label class="lable" for="sensor-timeZone">منطقه زمانی: </label>
+                        <select id="sensor-timeZone" class="select-query">
+                        </select>
+                    </div>
+                    <div>
+                        <label class="lable" for="sensor-calendarType">نوع تقویم: </label>
+                        <select id="sensor-calendarType" class="select-query">
+                        </select>
+                    </div>
+                </div> -->
+      </div>
+      <button class="btn-submit" style="margin-top: 80px;" onclick="updateSensor()">
+        ثبت
+      </button>
+    </div>
+  </div>
+
+  <!-- GRAPH -->
+  <div id="graph" class="content">
+    <div class="content-query">
+      <div class="navbar-sensors-graph" style="margin-bottom: 50px;">
+        <div>
+          <label class="lable">سنسور: </label>
+          <select id="select-sensor-graph" class="select-query" onchange="handleSelectChange(event)">
+          </select>
+        </div>
+        <div>
+          <input type="file" value="نمایش فایل گراف" id="select-file-graph" class="btn-submit">
+        </div>
+      </div>
+      <div class="graph-query">
+        <div>
+          <label for="select-type">نوع نمایش: </label>
+          <select id="select-type" class="select-query" title="year" onclick="chengePeriodList()">
+            <option value="month">ماهیانه</option>
+            <option value="day">روزانه</option>
+          </select>
+        </div>
+        <div>
+          <label for="select-year">سال: </label>
+          <select id="select-year" class="select-query" title="year" onclick="updateGraph()">
+            <option value="1402">۱۴۰۲</option>
+            <option value="1403">۱۴۰۳</option>
+            <option value="1404">۱۴۰۴</option>
+            <option value="1405">۱۴۰۵</option>
+            <option value="1406">۱۴۰۶</option>
+            <option value="1407">۱۴۰۷</option>
+            <option value="1408">۱۴۰۸</option>
+            <option value="1409">۱۴۰۹</option>
+            <option value="1410">۱۴۱۰</option>
+            <option value="1411">۱۴۱۱</option>
+            <option value="1412">۱۴۱۲</option>
+            <option value="1413">۱۴۱۳</option>
+            <option value="1414">۱۴۱۴</option>
+            <option value="1415">۱۴۱۵</option>
+            <option value="1416">۱۴۱۶</option>
+            <option value="1417">۱۴۱۷</option>
+            <option value="1418">۱۴۱۸</option>
+            <option value="1419">۱۴۱۹</option>
+            <option value="1420">۱۴۲۰</option>
+          </select>
+        </div>
+        <div>
+          <label for="select-month">ماه: </label>
+          <select id="select-month" class="select-query" title="year" onclick="updateGraph()">
+            <option value="1">۱</option>
+            <option value="2">۲</option>
+            <option value="3">۳</option>
+            <option value="4">۴</option>
+            <option value="5">۵</option>
+            <option value="6">۶</option>
+            <option value="7">۷</option>
+            <option value="8">۸</option>
+            <option value="9" selected="selected">۹</option>
+            <option value="10">۱۰</option>
+            <option value="11">۱۱</option>
+            <option value="12">۱۲</option>
+          </select>
+        </div>
+        <div>
+          <label for="select-day">روز: </label>
+          <select id="select-day" class="select-query" title="year" onclick="updateGraph() ">
+            <option value="1">۱</option>
+            <option value="2">۲</option>
+            <option value="3">۳</option>
+            <option value="4">۴</option>
+            <option value="5">۵</option>
+            <option value="6">۶</option>
+            <option value="7">۷</option>
+            <option value="8">۸</option>
+            <option value="9">۹</option>
+            <option value="10">۱۰</option>
+            <option value="11">۱۱</option>
+            <option value="12">۱۲</option>
+            <option value="13">۱۳</option>
+            <option value="14">۱۴</option>
+            <option value="15">۱۵</option>
+            <option value="16">۱۶</option>
+            <option value="17">۱۷</option>
+            <option value="18">۱۸</option>
+            <option value="19">۱۹</option>
+            <option value="20">۲۰</option>
+            <option value="21">۲۱</option>
+            <option value="22">۲۲</option>
+            <option value="23">۲۳</option>
+            <option value="24">۲۴</option>
+            <option value="25">۲۵</option>
+            <option value="26">۲۶</option>
+            <option value="27">۲۷</option>
+            <option value="28">۲۸</option>
+            <option value="29">۲۹</option>
+            <option value="30">۳۰</option>
+            <option value="31">۳۱</option>
+          </select>
+        </div>
+        <div>
+          <label for="select-period">دوره نمونه برداری: </label>
+          <select id="select-period" class="select-query" title="period" onclick="updateGraph()">
+            <option value="900" selected="selected">15 دقیقه</option>
+            <option value="3600">۱ ساعت</option>
+            <option value="10800">۳ ساعت</option>
+            <option value="21600">6 ساعت</option>
+            <option value="43200">12 ساعت</option>
+            <option value="86400">۱ روز</option>
+          </select>
+        </div>
+      </div>
+
+      <canvas class="graph" id="myChart" height="80"></canvas>
+
+    </div>
+  </div>
+</body>
+
+
+
+<!-- handle home sensor values -->
+<script>
+  function handleSelectChange(event) {
+    var selectElement = event.target;
+    var value = selectElement.value;
+    updateGraph();
+  }
+
+  function handleSelectValue(key, selectID) {
+    const selectElement = document.getElementById(selectID);
+    const desiredValue = key;
+    for (let i = 0; i < selectElement.options.length; i++) {
+      const option = selectElement.options[i];
+      if (option.value === desiredValue) {
+        option.selected = true;
+      } else {
+        option.selected = false;
+      }
+    }
+  }
+
+
+  var currentPage;
+  var isReflash;
+  var currentSensor;
+  var sensorsArray;
+
+  function getHome() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/WebServer/AllData", true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        sensorsArray = JSON.parse(xhr.responseText).sensors;
+        const timeValue = JSON.parse(xhr.responseText).time.epoch;
+        const onlineClock = document.getElementById('clock-value');
+        onlineClock.textContent = moment.unix(timeValue).format("jYYYY/jMM/jDD HH:mm:ss");
+        switch (currentPage) {
+          case 'home': {
+            handleHomeValue(JSON.parse(xhr.responseText).home.sensors);
+            break;
+          }
+          case 'settings': {
+            if (!isReflash) {
+              handleModemSettingsValue(JSON.parse(xhr.responseText).settings);
+            }
+            isReflash = true;
+            break;
+          }
+          case 'sensors': {
+            if (!isReflash) {
+              handleSensorsValue(
+                JSON.parse(xhr.responseText).sensors,
+                'select-sensor-sensors'
+              )
+              onChange_sensorSelect();
+            }
+            isReflash = true;
+            break;
+          }
+          case 'graph': {
+            if (!isReflash) {
+              handleSensorsValue(
+                JSON.parse(xhr.responseText).sensors,
+                'select-sensor-graph'
+              )
+            }
+            isReflash = true;
+            break;
+          }
+          default:
+            break;
+        }
+
+      }
+    };
+    xhr.send();
+  }
+
+  // Function to parse and reflash sensor online values
+  function startSendingRequests() {
+    showContent('graph');
+    getHome();
+    setInterval(getHome, 4000); // Send request every 4 seconds
+  }
+
+
+  function handleHomeValue(sensors) {
+    for (let index = 0; index < sensors.length; index++) {
+      const element = sensors[index];
+      const key = Object.keys(element)[0];
+      var value = "D.C";
+      if (Object.values(element)[0] != "D.C") {
+        value = parseFloat(Object.values(element)[0]).toFixed(1);
+      }
+      document.getElementById(`online-temp-val${(index + 1)}`).textContent = value;
+      document.getElementById(`online-name-val${(index + 1)}`).textContent = key;
+    }
+  }
+
+  function handleSensorsValue(sensors, documentID) {
+    const selectElement = document.getElementById(documentID);
+    selectElement.length = 0;
+    for (let index = 0; index < sensors.length; index++) {
+      const newOption = document.createElement("option");
+      newOption.text = sensors[index]['name'];
+      newOption.value = sensors[index]['serial'];
+      selectElement.appendChild(newOption);
+    }
+  }
+
+  function handleModemSettingsValue(settings) {
+    const modemSSID = settings.station.ssid;
+    const modemPassword = settings.station.password;
+
+    document.getElementById("input_SSID").value = modemSSID;
+    document.getElementById("input_PASSWORD").value = modemPassword;
+  }
+
+  function onChange_sensorSelect() {
+    const selectedSensor = document.getElementById("select-sensor-sensors").value;
+    for (let index = 0; index < sensorsArray.length; index++) {
+      const element = sensorsArray[index];
+      if (element['serial'] === selectedSensor) {
+        currentSensor = element;
+        break;
+      }
+    }
+
+    document.getElementById('sensor-serial').value = currentSensor['serial'];
+    document.getElementById('sensor-name').value = currentSensor['name'];
+    document.getElementById('sensor-max').value = currentSensor['max'];
+    document.getElementById('sensor-min').value = currentSensor['min'];
+    document.getElementById('sensor-maxPhone').value = currentSensor['maxPhone'];
+    document.getElementById('sensor-minPhone').value = currentSensor['minPhone'];
+    document.getElementById('sensor-calibration').value = currentSensor['calibration'];
+    document.getElementById('sensor-name').value = currentSensor['name'];
+    handleSelectValue(currentSensor['sendPeriod'], 'sensor-sendPeriod');
+  }
+</script>
+
+
+
+
+<!-- info about tabs -->
+<script>
+  const tabs = ['home', 'settings', 'sensors', 'graph']
+  const graphPeriodDaily = [{
+    "۱۵ دقیقه": 900
+  }, {
+    "۳۰ دقیقه": 1800
+  }, {
+    "۱ ساعت": 3600
+  }]
+  const graphPeriodMonthly = [{
+    "۳ ساعت": 10800
+  }, {
+    "۶ ساعت": 21600
+  }, {
+    "۱۲ ساعت": 43200
+  }]
+</script>
+
+
+
+
+
+
+<!-- handle 'settings' tab -->
+<script>
+  function saveSettings() {
+    const SSIDVal = document.getElementById('input_SSID').value;
+    const SSIDPasswordVal = document.getElementById('input_PASSWORD').value;
+
+
+    var xhr = new XMLHttpRequest();
+    var url = "/WebServer/Settings";
+    var data = {
+      station: {
+        ssid: SSIDVal,
+        password: SSIDPasswordVal
+      },
+    };
+
+    xhr.open("PUT", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        var response = xhr.responseText;
+        alert("بروز رسانی انجام شد");
+      }
+    };
+    xhr.send(JSON.stringify(data));
+  }
+</script>
+
+
+
+
+<!-- handle 'sensors' tab -->
+
+<script>
+  function updateSensor() {
+    const serialVal = document.getElementById('sensor-serial').value;
+    const nameVal = document.getElementById('sensor-name').value;
+    const maxVal = document.getElementById('sensor-max').value;
+    const minVal = document.getElementById('sensor-min').value;
+    const maxPhoneVal = document.getElementById('sensor-maxPhone').value;
+    const minPhoneVal = document.getElementById('sensor-minPhone').value;
+    const calibrationVal = document.getElementById('sensor-calibration').value;
+    const sendPeriodVal = document.getElementById('sensor-sendPeriod').value;
+
+
+    var xhr = new XMLHttpRequest();
+    var url = "/WebServer/Sensors";
+    var data = {
+      sensor: {
+        serial: serialVal,
+        name: nameVal,
+        max: maxVal,
+        min: minVal,
+        maxPhone: maxPhoneVal,
+        minPhone: minPhoneVal,
+        calibration: calibrationVal,
+        sendPeriod: sendPeriodVal
+      },
+    };
+
+    xhr.open("PUT", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        var response = xhr.responseText;
+        alert("بروز رسانی انجام شد");
+      }
+    };
+    xhr.send(JSON.stringify(data));
+  }
+</script>
+
+
+
+
+<!-- handle graph change -->
+<script>
+  var ctx = document.getElementById('myChart').getContext('2d');
+
+  var myChart = new Chart(ctx, {
+    type: 'line',
+
+    data: {
+      datasets: [{
+        borderColor: '#161922',
+        label: 'Darestan Sanat Monitoring',
+        backgroundColor: [
+          '#6058c1'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: false,
+          min: 0,
+          max: 40
+        }
+      }
+    }
+  });
+
+  function chengePeriodList() {
+    // if (condition) {
+    var dropdown1 = document.getElementById("select-type");
+    var dropdown2 = document.getElementById("select-period");
+
+    // Clear existing options
+    dropdown2.innerHTML = "";
+
+    var selectedValue = dropdown1.value;
+
+    // Add new options to dropdown2 based on the selected value in dropdown1
+    if (selectedValue === "day") {
+      for (var i = 0; i < graphPeriodDaily.length; i++) {
+        const element = graphPeriodDaily[i];
+        var option = document.createElement("option");
+        option.value = Object.values(element)[0];
+        option.text = Object.keys(element)[0];
+        dropdown2.add(option);
+      }
+    } else if (selectedValue === "month") {
+      for (var i = 0; i < graphPeriodMonthly.length; i++) {
+        const element = graphPeriodMonthly[i];
+        var option = document.createElement("option");
+        option.value = Object.values(element)[0];
+        option.text = Object.keys(element)[0];
+        dropdown2.add(option);
+      }
+    }
+    // }
+  }
+
+  function updateGraph() {
+    const yearVal = document.getElementById('select-year').value;
+    const monthVal = document.getElementById('select-month').value;
+    var dayVal = document.getElementById('select-day').value;
+    const typeVal = document.getElementById('select-type').value;
+    const serialVal = document.getElementById('select-sensor-graph').value;
+    var startUnix;
+    var resultAdd;
+    var endUnix;
+    var period = parseInt(document.getElementById('select-period').value);
+    const formatDate = 'jYYYY/jM/jD';
+    addStr = 'days';
+
+    if (typeVal === 'month') {
+      addStr = 'months';
+      dayVal = 1;
+    }
+    startUnix = new Date(
+      moment(`${yearVal}/${monthVal}/${dayVal}`, formatDate)
+    ).getTime() / 1000;
+
+    endUnix = new Date(
+      moment(`${yearVal}/${monthVal}/${dayVal}`, formatDate).add(1, addStr)
+    ).getTime() / 1000;
+
+    var xhr = new XMLHttpRequest();
+    var url = "/WebServer/Graph";
+    var data = {
+      query: {
+        sensorSerial: serialVal,
+        startUnix: startUnix,
+        endUnix: endUnix,
+        period: period
+      }
+    };
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        //.................................................
+        var response = xhr.responseText;
+        // const response = testLogs; //comment for developer test
+        const jsonLogs = JSON.parse(response);
+        // const jsonLogs = response; //comment for developer test
+        var resultLabels = [];
+        var resultLabelsUnix = [];
+        var resultLogs = [];
+
+        var addationUnix = 0;
+        var momentFormat = "";
+        if (typeVal == 'month') {
+          momentFormat = "jYYYY/jMM/jDD HH:mm:ss";
+          addationUnix = (period)
+        } else {
+          momentFormat = "HH:mm:ss";
+          addationUnix = (period)
+        }
+        resultAdd = startUnix;
+
+        while (resultAdd <= endUnix) {
+          resultLogs.push({
+            x: moment.unix(resultAdd).format(momentFormat),
+            y: null
+          })
+          resultLabels.push(moment.unix(resultAdd).format(momentFormat));
+          resultAdd += addationUnix;
+        }
+        debugger;
+        for (let
+          index = 0; index < jsonLogs.logs.length; index++) {
+          var valueResult = jsonLogs.logs[index];
+          if (valueResult != "" &&
+            valueResult != "D.C.") {
+            resultLogs[index].y = jsonLogs.logs[index]
+          }
+        }
+        myChart.data.labels = resultLabels;
+        myChart.data.datasets[0].data = resultLogs;
+        myChart.update();
+        //.................................................
+      }
+    };
+    xhr.send(JSON.stringify(data));
+  }
+
+
+
+  document.getElementById('select-file-graph').addEventListener('change', function selectedFileChanged() {
+    if (this.files.length === 0) {
+      console.log('No file selected.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function fileReadCompleted() {
+      debugger;
+      const jsonLogs = JSON.parse(reader.result); 
+      var resultLabels = [];
+      var resultLogs = [];
+
+      var addationUnix = (jsonLogs.period);
+      var momentFormat = "jYYYY/jMM/jDD HH:mm:ss";
+      
+      resultAdd = jsonLogs.StartTime;
+      var counter = 0;
+
+      while (counter< jsonLogs.Count) {
+        resultLogs.push({
+          x: moment.unix(resultAdd).format(momentFormat),
+          y: null
+        })
+        resultLabels.push(moment.unix(resultAdd).format(momentFormat));
+        resultAdd += addationUnix;
+        counter++;
+      }
+      debugger;
+      for (let
+        index = 0; index < jsonLogs.logs.length; index++) {
+        var valueResult = jsonLogs.logs[index];
+        if (valueResult != "" &&
+          valueResult != "D.C.") {
+          resultLogs[index].y = jsonLogs.logs[index]
+        }
+      }
+      myChart.data.labels = resultLabels;
+      myChart.data.datasets[0].data = resultLogs;
+      myChart.update();
+
+    };
+    reader.readAsText(this.files[0]);
+  });
+
+</script>
+
+
+<!-- handle tab change -->
+<script>
+  function showContent(contentId) {
+    currentPage = contentId;
+    isReflash = false;
+
+    var contents = document.getElementsByClassName('content');
+    tabs.map(value => {
+      document.getElementById(`tab-${value}`).classList.remove('hovered');
+    })
+    for (var i = 0; i < contents.length; i++) {
+      contents[i].style.display = 'none';
+    }
+    document.getElementById(contentId).style.display = 'block';
+    document.getElementById(`tab-${contentId}`).classList.add('hovered');
+  }
+</script>
+
+</html>
